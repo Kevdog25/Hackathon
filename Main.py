@@ -1,8 +1,10 @@
 import xlrd
+import numpy as np
+import sys
+import matplotlib.pyplot as plt
 from Student import Student
 from Employer import Employer
 __author__ = 'Kevin'
-
 
 def loadxls(studentsfile,jobsfile):
     """Returns a list of the loaded resumes and job offers"""
@@ -21,30 +23,9 @@ def loadxls(studentsfile,jobsfile):
 
     return students,jobs
 
-
-def countfrequency(s,f = []):
-    for w in s.split(';'):
-        w = w.strip(' ')
-        found = False
-        for item in f:
-            if item[0]==w:
-                item[1]+=1
-                found = True
-        if not found and w != '':
-            f.append([w,1])
-
-    f.sort(key = lambda x : x[1],reverse = True)
-    return f
-
-
 students,jobs = loadxls('DataFiles//TDA Students Test.xlsx','DataFiles//TDA Jobs Data Test.xls')
 
-f = []
-for s in students:
-    f = countfrequency(s.Major,f)
-    f = countfrequency(s.Minor,f)
 
-for i in f:
-    print(i)
+print(students[20],'\n',jobs[100])
 
-print(len(f))
+

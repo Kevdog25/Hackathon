@@ -4,6 +4,8 @@ __author__ = 'Kevin'
 
 class Student(XLSDataStruct.DataStruct):
     def __init__(self,row):
+        self.employmentDist = {}
+        self.skillsDist = {}
         self.Major = self.validate(row[0])
         self.Minor = self.validate(row[1])
         self.GradDate = self.validate(row[2])
@@ -16,6 +18,17 @@ class Student(XLSDataStruct.DataStruct):
         self.Skills = [self.validate(row[10]),self.validate(row[11]),self.validate(row[12])]
         self.Courses = self.validate(row[13])
         self.Projects = self.validate(row[14])
+
+        self.makeEmploymentDist()
+        self.makeSkillsDist()
+
+    def makeEmploymentDist(self):
+        for e in self.Employment:
+            self.employmentDist = self.countfrequency(e[1],self.employmentDist)
+
+    def makeSkillsDist(self):
+        for s in self.Skills:
+            self.skillsDist = self.countfrequency(s,self.skillsDist)
 
     def __str__(self):
         return('Major: {}\nMinor: {}\nGradDate: {}\nDegrees: {}\nEmployment: {}\nSkills: {}\nCourses: {}\nProjects: {}'
