@@ -4,6 +4,7 @@ import sys
 import matplotlib.pyplot as plt
 from Student import Student
 from Employer import Employer
+import GetCorpus
 __author__ = 'Kevin'
 
 def loadxls(studentsfile,jobsfile):
@@ -26,6 +27,7 @@ def loadxls(studentsfile,jobsfile):
 students,jobs = loadxls('DataFiles//TDA Students Test.xlsx','DataFiles//TDA Jobs Data Test.xls')
 
 
-print(students[20],'\n',jobs[100])
-
+#print(students[20],'\n',jobs[100])
+student_corpus, student_dictionary = GetCorpus.corpus_dictionary(students)
+employer_corpus, employer_dictionary = GetCorpus.corpus_dictionary(jobs)
 
