@@ -26,18 +26,51 @@ def loadxls(studentsfile,jobsfile):
 
     return students,jobs
 
-students,jobs = loadxls('DataFiles//TDA Students Test.xlsx','DataFiles//TDA Jobs Data Test.xls')
+students,employers = loadxls('DataFiles//TDA Students Test.xlsx','DataFiles//TDA Jobs Data Test.xls')
 
 
 #print(students[20],'\n',jobs[100])
 student_corpus, student_dictionary, student_texts = GetCorpus.corpus_dictionary(students)
-employer_corpus, employer_dictionary, employer_texts = GetCorpus.corpus_dictionary(jobs)
+employer_corpus, employer_dictionary, employer_texts = GetCorpus.corpus_dictionary(employers)
 
-employer_tfidf = models.TfidfModel(employer_corpus)
-employer_index = similarities.SparseMatrixSimilarity(employer_tfidf[employer_corpus], num_features=len(
-    employer_dictionary))
-test = employer_dictionary.doc2bow(student_texts[0])
-sims = employer_index[employer_tfidf[test]]
-sims_sorted = sorted(list(enumerate(sims)), key=itemgetter(1))
-sims_sorted.reverse()
-print(sims_sorted)
+student_tfidf = models.TfidfModel(student_corpus)
+student_index = similarities.SparseMatrixSimilarity(student_tfidf[student_corpus], num_features=len(
+    student_dictionary))
+for i in range(len(employers)):
+    bow = student_dictionary.doc2bow(employer_texts[i])
+    sims = sorted(list(enumerate(student_index[student_tfidf[bow]])), key=itemgetter(1),reverse = True)
+    employers[i].Sims = sims
+
+employers.sort(key = lambda x : x.Sims[0][1],reverse = True)
+print(employers[0].Sims[0],employers[len(employers)-1].Sims[0])
+bestfrquency = {}
+for i in range(int(len(employers)/4)):
+    bestfrquency = Employer.catfrequencies(employers[i].descriptionDist,bestfrquency)
+
+b = []
+for k in bestfrquency.keys():
+    b.append([k,bestfrquency[k]])
+b.sort(key = lambda x : x[1],reverse = True)
+
+worstfrquency = {}
+for i in range(int(len(employers)/4)):
+    worstfrquency = Employer.catfrequencies(employers[len(employers)-1-i].descriptionDist,worstfrquency)
+w = []
+for k in worstfrquency.keys():
+    w.append([k,worstfrquency[k]])
+w.sort(key = lambda x : x[1],reverse=True)
+print(b)
+print(w)
+
+bdif = []
+for word in b:
+    found = False
+    for otherword in w:
+        if otherword[0] == word[0]:
+            bdif.append([word[0],word[1]-otherword[1]])
+            found = True
+            break
+    if not found:
+        bdif.append(word)
+bdif.sort(key = lambda x : abs(x[1]),reverse=True)
+print(bdif)

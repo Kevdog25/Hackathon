@@ -4,6 +4,7 @@ __author__ = 'Kevin'
 
 class Student(XLSDataStruct.DataStruct):
     def __init__(self,row):
+        self.Sims = None
         self.employmentDist = {}
         self.skillsDist = {}
         self.Major = self.validate(row[0])

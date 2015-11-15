@@ -18,6 +18,18 @@ class DataStruct:
         'my',
         'your',
         'is',
+        'with',
+        'at',
+        'as',
+        'from',
+        'by',
+        'with',
+        'or',
+        'you',
+        'our',
+        'we',
+        '*',
+        'will'
     ]
 
     punctuation = [
@@ -78,3 +90,19 @@ class DataStruct:
             if k in f2.keys():
                 c += f2[k]*f1[k]
         return c
+
+    @staticmethod
+    def catfrequencies(f1,f2):
+        f = {}
+        for k in f1.keys():
+            if k in f.keys():
+                f[k] += f1[k]
+            else:
+                f[k] = f1[k]
+        for k in f2.keys():
+            if k in f.keys():
+                f[k] += f2[k]
+            else:
+                f[k] = f2[k]
+        return f
+
