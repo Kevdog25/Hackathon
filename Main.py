@@ -1,13 +1,13 @@
+""" requires gensim, wordcloud, and Pillow Python libraries to be installed
+"""
 import xlrd
-import numpy as np
-import sys
-import matplotlib.pyplot as plt
 from Student import Student
 from Employer import Employer
 import GetCorpus
 from gensim import corpora, models, similarities
 from operator import itemgetter
 __author__ = 'Kevin'
+
 
 def loadxls(studentsfile,jobsfile):
     """Returns a list of the loaded resumes and job offers"""
@@ -28,13 +28,11 @@ def loadxls(studentsfile,jobsfile):
 
 students,employers = loadxls('DataFiles//TDA Students Test.xlsx','DataFiles//TDA Jobs Data Test.xls')
 
-#print(students[20],'\n',jobs[100])
+# generate corpus and dictionary for the student and employer spreadsheets
 student_corpus, student_dictionary, student_texts = GetCorpus.corpus_dictionary(students)
 employer_corpus, employer_dictionary, employer_texts = GetCorpus.corpus_dictionary(employers)
 
-#import numpy as np
-#print(np.mean([len(x) for x in student_texts])*len(student_texts))
-
+# use Latent Dirichlet Allocation to weight words based on importance
 corpora.MmCorpus.serialize('employer_corpus.mm', employer_corpus)
 mm_employers = corpora.MmCorpus('employer_corpus.mm')
 lsi_employers = models.ldamodel.LdaModel(corpus=mm_employers, id2word=employer_dictionary, num_topics=5, update_every=1, chunksize=100, passes=10)
@@ -47,6 +45,9 @@ lsi_employers.print_topics(5)
 #print('\n','-'*100)
 lsi_students.print_topics(5)
 
+""" use similarity features of gensim to judge similarity between student applications and job offers
+then filter out best and worst students (in terms of similarity) and compare their word usage
+"""
 # student_tfidf = models.TfidfModel(student_corpus)
 # student_index = similarities.SparseMatrixSimilarity(student_tfidf[student_corpus], num_features=len(
 #     student_dictionary))
@@ -89,6 +90,7 @@ lsi_students.print_topics(5)
 # bdif.sort(key = lambda x : abs(x[1]),reverse=True)
 # print(bdif)
 
+""" create word clouds of most frequent words for students and employers"""
 from WordCloud import generate_wordcloud
 generate_wordcloud(student_texts)
 generate_wordcloud(employer_texts)

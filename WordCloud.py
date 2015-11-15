@@ -8,9 +8,4 @@ def generate_wordcloud(text):
     wordcloud = WordCloud().generate(text)
     plt.imshow(wordcloud)
     plt.axis('off')
-
-    # wordcloud = WordCloud(max_font_size=40).generate(text)
-    # plt.figure()
-    # plt.imshow(wordcloud)
-    # plt.axis("off")
     plt.show()
