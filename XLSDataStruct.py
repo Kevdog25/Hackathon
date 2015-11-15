@@ -45,7 +45,8 @@ class DataStruct:
         '{',
         '}',
         '-',
-        '\'s'
+        '\'s',
+        ','
     ]
 
     def validate(self,item):

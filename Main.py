@@ -37,15 +37,15 @@ employer_corpus, employer_dictionary, employer_texts = GetCorpus.corpus_dictiona
 
 corpora.MmCorpus.serialize('employer_corpus.mm', employer_corpus)
 mm_employers = corpora.MmCorpus('employer_corpus.mm')
-lsi_employers = models.ldamodel.LdaModel(corpus=mm_employers, id2word=employer_dictionary, num_topics=20, update_every=1, chunksize=100, passes=1)
+lsi_employers = models.ldamodel.LdaModel(corpus=mm_employers, id2word=employer_dictionary, num_topics=5, update_every=1, chunksize=100, passes=10)
 corpora.MmCorpus.serialize('student_corpus.mm', student_corpus)
 mm_students = corpora.MmCorpus('student_corpus.mm')
-lsi_students = models.ldamodel.LdaModel(corpus=mm_students, id2word=student_dictionary, num_topics=20, update_every=1, chunksize=100, passes=1)
+lsi_students = models.ldamodel.LdaModel(corpus=mm_students, id2word=student_dictionary, num_topics=5, update_every=1, chunksize=100, passes=10)
 import logging
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
-lsi_employers.print_topics(10)
-print(' ')
-lsi_students.print_topics(10)
+lsi_employers.print_topics(5)
+#print('\n','-'*100)
+lsi_students.print_topics(5)
 
 # student_tfidf = models.TfidfModel(student_corpus)
 # student_index = similarities.SparseMatrixSimilarity(student_tfidf[student_corpus], num_features=len(
