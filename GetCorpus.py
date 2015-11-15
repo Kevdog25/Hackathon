@@ -20,4 +20,4 @@ def corpus_dictionary(source):
 
     dictionary = corpora.Dictionary(texts)
     corpus = [dictionary.doc2bow(row) for row in texts]
-    return corpus, dictionary
+    return corpus, dictionary, texts
