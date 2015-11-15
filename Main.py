@@ -88,3 +88,7 @@ lsi_students.print_topics(5)
 #         bdif.append(word)
 # bdif.sort(key = lambda x : abs(x[1]),reverse=True)
 # print(bdif)
+
+from WordCloud import generate_wordcloud
+generate_wordcloud(student_texts)
+generate_wordcloud(employer_texts)
