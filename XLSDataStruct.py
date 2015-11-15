@@ -18,8 +18,8 @@ class DataStruct:
         'my',
         'your',
         'is',
-
     ]
+
     punctuation = [
         ';',
         '.',
@@ -36,7 +36,6 @@ class DataStruct:
         '\'s'
     ]
 
-
     def validate(self,item):
         """Validates the input to reformat and remove unwanted characters and words"""
         v = str(item).lower().lstrip('empty:').lstrip('text:').lstrip('ldate:').strip('\'')
@@ -51,7 +50,8 @@ class DataStruct:
         encoded = v.encode('ascii','ignore')
         return encoded.decode().split()
 
-    def countfrequency(self,s,f = None):
+    @staticmethod
+    def countfrequency(s,f = None):
         if f is None:
             f = {}
         for w in s:
@@ -63,7 +63,8 @@ class DataStruct:
 
         return f
 
-    def norm(self,thing):
+    @staticmethod
+    def norm(thing):
         tot = 0
         for item in thing:
             tot += float(item[1])

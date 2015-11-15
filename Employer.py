@@ -6,6 +6,7 @@ class Employer(XLSDataStruct.DataStruct):
     def __init__(self,row):
         self.qualDist = {}
         self.descriptionDist = {}
+
         self.Title = self.validate(row[0])
         self.Description = self.validate(row[1])
         self.Type = self.validate(row[2])
