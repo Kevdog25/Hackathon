@@ -29,7 +29,8 @@ class DataStruct:
         'our',
         'we',
         '*',
-        'will'
+        'will',
+        'are'
     ]
 
     punctuation = [

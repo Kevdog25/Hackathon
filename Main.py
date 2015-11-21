@@ -26,6 +26,20 @@ def loadxls(studentsfile,jobsfile):
 
     return students,jobs
 
+def sortLDA(terms):
+    dist = []
+    for topic in terms:
+        for term in topic[1]:
+            found = False
+            for existing in dist:
+                if existing[0] == term[0]:
+                    existing[1] += term[1]
+                    found = True
+            if not found:
+                dist.append([term[0],term[1]])
+    dist.sort(key = lambda x : x[1],reverse=True)
+    return dist
+
 students,employers = loadxls('DataFiles//TDA Students Test.xlsx','DataFiles//TDA Jobs Data Test.xls')
 
 #print(students[20],'\n',jobs[100])
@@ -43,9 +57,28 @@ mm_students = corpora.MmCorpus('student_corpus.mm')
 lsi_students = models.ldamodel.LdaModel(corpus=mm_students, id2word=student_dictionary, num_topics=5, update_every=1, chunksize=100, passes=10)
 import logging
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
-lsi_employers.print_topics(5)
+#lsi_employers.print_topics(5)
 #print('\n','-'*100)
-lsi_students.print_topics(5)
+#lsi_students.print_topics(5)
+
+employerTerms = lsi_employers.show_topics(formatted = False)
+studentTerms = lsi_students.show_topics(formatted = False)
+
+employerDist = sortLDA(employerTerms)
+studentDist = sortLDA(studentTerms)
+diff = []
+for word in employerDist:
+    found = False
+    for otherword in studentDist:
+        if otherword[0] == word[0]:
+            word[1] -= otherword[1]
+            diff.append(word)
+            found = True
+            break
+    if not found:
+        diff.append(word)
+diff.sort(key = lambda x : abs(x[1]),reverse=True)
+print(diff)
 
 # student_tfidf = models.TfidfModel(student_corpus)
 # student_index = similarities.SparseMatrixSimilarity(student_tfidf[student_corpus], num_features=len(
