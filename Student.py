@@ -7,8 +7,10 @@ class Student(XLSDataStruct.DataStruct):
         self.Sims = None
         self.employmentDist = {}
         self.skillsDist = {}
-        self.Major = self.validate(row[0])
-        self.Minor = self.validate(row[1])
+        self.majorDist = {}
+
+        self.Majors = self.validate(row[0],';')
+        self.Minor = self.validate(row[1],',')
         self.GradDate = self.validate(row[2])
         self.Degrees = self.validate(row[3])
         self.Employment = []
@@ -22,6 +24,7 @@ class Student(XLSDataStruct.DataStruct):
 
         self.makeEmploymentDist()
         self.makeSkillsDist()
+        self.makeMajorDist()
 
     def makeEmploymentDist(self):
         for e in self.Employment:
@@ -31,7 +34,11 @@ class Student(XLSDataStruct.DataStruct):
         for s in self.Skills:
             self.skillsDist = self.countfrequency(s, self.skillsDist)
 
+    def makeMajorDist(self):
+        self.majorDist = self.countfrequency(self.Majors)
+        self.majorDist = self.countfrequency(self.Minor,self.majorDist)
+
     def __str__(self):
         return('Major: {}\nMinor: {}\nGradDate: {}\nDegrees: {}\nEmployment: {}\nSkills: {}\nCourses: {}\nProjects: {}',
-               format(self.Major, self.Minor, self.GradDate, self.Degrees, self.Employment, self.Skills, self.Courses,
+               format(self.Majors, self.Minor, self.GradDate, self.Degrees, self.Employment, self.Skills, self.Courses,
                       self.Projects))

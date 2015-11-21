@@ -30,11 +30,10 @@ class DataStruct:
         'we',
         '*',
         'will',
-        'are'
+        'are',
     ]
 
     punctuation = [
-        ';',
         '.',
         ':',
         '!',
@@ -46,11 +45,10 @@ class DataStruct:
         '{',
         '}',
         '-',
-        '\'s',
-        ','
+        '\'s'
     ]
 
-    def validate(self, item):
+    def validate(self, item,splitAt = ' '):
         """Validates the input to reformat and remove unwanted characters and words"""
         v = str(item).lower().lstrip('empty:').lstrip('text:').lstrip('ldate:').strip('\'')
         v = re.sub('\\\\n', ' ', v)
@@ -58,11 +56,12 @@ class DataStruct:
             v = v.replace(' '+word+' ', ' ')
         for word in self.punctuation:
             v = v.replace(word, '')
+        v = re.sub('[ ]{2,}', ' ', v)
         v = re.sub(' [0-9]* ', ' ', v)
-        v = re.sub('\$.? ', ' ', v)
+        v = re.sub('\&',' ', v)
 
         encoded = v.encode('ascii', 'ignore')
-        return encoded.decode().split()
+        return encoded.decode().split(splitAt)
 
     @staticmethod
     def countfrequency(s, f=None):
@@ -95,15 +94,8 @@ class DataStruct:
 
     @staticmethod
     def catfrequencies(f1, f2):
-        f = {}
-        for k in f1.keys():
-            if k in f.keys():
-                f[k] += f1[k]
-            else:
-                f[k] = f1[k]
         for k in f2.keys():
-            if k in f.keys():
-                f[k] += f2[k]
+            if k in f1.keys():
+                f1[k] += f2[k]
             else:
-                f[k] = f2[k]
-        return f
+                f1[k] = f2[k]

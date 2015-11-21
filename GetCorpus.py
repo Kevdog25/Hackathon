@@ -7,7 +7,7 @@ def corpus_dictionary(source):
     texts = []
     if len(source) != 0 and type(source[0]) is Student.Student:
         for row in source:
-            text = row.Major + row.Minor + row.Courses + row.Projects
+            text = row.Majors + row.Minor + row.Courses + row.Projects
             for p in row.Skills:
                 text += p
             for p in row.Employment:

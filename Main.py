@@ -1,6 +1,7 @@
 """ requires gensim, wordcloud, and Pillow Python libraries to be installed
 """
 import xlrd
+import matplotlib.pyplot as plt
 from Student import Student
 from Employer import Employer
 import GetCorpus
@@ -26,6 +27,7 @@ def loadxls(studentsfile,jobsfile):
 
     return students,jobs
 
+
 def sortLDA(terms):
     dist = []
     for topic in terms:
@@ -39,6 +41,16 @@ def sortLDA(terms):
                 dist.append([term[0],term[1]])
     dist.sort(key = lambda x : x[1],reverse=True)
     return dist
+
+def sameSort(d1,d2):
+    l1 = []
+    l2 = []
+    for k in d1:
+        l1.append([k,float(d1[k])])
+    l1.sort(key = lambda x : x[1],reverse=True)
+    for item in l1:
+        l2.append([item[0],float(d2[item[0]])])
+    return l1,l2
 
 students,employers = loadxls('DataFiles//TDA Students Test.xlsx','DataFiles//TDA Jobs Data Test.xls')
 
@@ -76,7 +88,38 @@ for word in employerDist:
     if not found:
         diff.append(word)
 diff.sort(key = lambda x : abs(x[1]),reverse=True)
-print(diff)
+#print(diff)
+
+""" Finding and comparing the distribution of majors."""
+employerMajors = {}
+studentMajors = {}
+for employer in employers:
+    Employer.catfrequencies(employerMajors,employer.majorDist)
+for student in students:
+    student.catfrequencies(studentMajors,student.majorDist)
+
+for k in studentMajors.keys():
+    if k not in employerMajors:
+        employerMajors[k] = 0
+for k in employerMajors.keys():
+    if k not in studentMajors:
+        studentMajors[k] = 0
+
+EM,SM = sameSort(employerMajors,studentMajors)
+with open('Majors.txt','w') as f:
+    f.write('Major' + ' '*32 + '{:>8}|{:<8}\n'.format('Employer','Student'))
+    for i in range(len(EM)):
+        f.write('{:-<40}{:->5g}|{:<5g}\n'.format(EM[i][0],EM[i][1],SM[i][1]))
+
+totalSM = sum([i[1] for i in SM])
+totalEM = sum([i[1] for i in EM])
+plt.plot([i[1]/totalSM for i in SM],label = 'Students')
+plt.plot([i[1]/totalEM for i in EM],label = 'Employers')
+plt.title('Frequency Distribution of Majors')
+plt.xlabel('Majors sorted by frequency in students')
+plt.ylabel('Probability Density of Major Listed')
+plt.savefig('MajorFrequencyDist')
+
 
 """ use similarity features of gensim to judge similarity between student applications and job offers
 then filter out best and worst students (in terms of similarity) and compare their word usage
@@ -124,6 +167,6 @@ then filter out best and worst students (in terms of similarity) and compare the
 # print(bdif)
 
 """ create word clouds of most frequent words for students and employers"""
-from WordCloud import generate_wordcloud
-generate_wordcloud(student_texts)
-generate_wordcloud(employer_texts)
+# from WordCloud import generate_wordcloud
+# generate_wordcloud(student_texts)
+# generate_wordcloud(employer_texts)
