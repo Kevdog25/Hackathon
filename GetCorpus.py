@@ -1,4 +1,5 @@
-import Student, Employer
+import Student
+import Employer
 from gensim import corpora
 
 
